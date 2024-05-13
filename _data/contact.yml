@@ -12,6 +12,10 @@
   icon: "fab fa-linkedin"   # icons powered by <https://fontawesome.com/>
   url:  "https://www.linkedin.com/in/jonas1ara" # Fill with your Linkedin homepage
 
+- type: youtube
+  icon: "fab fa-youtube"
+  url:  "https://www.youtube.com/channel/UCi-dr1Oe8oNtjlyjlPBx5gg" # Fill with your youtube homepage
+
 # Uncomment and complete the url below to enable more contact options
 #
 # - type: mastodon
