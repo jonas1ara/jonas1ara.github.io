@@ -8,7 +8,7 @@ Hi there 👋, my name is Jonas Lara, I am originally from Mexico 🇲🇽 but n
 
 ## These days
 
-After working for a couple of years in the automotive industry as a mechatronics technician and stopping my career as a result of the covid-19 pandemic, **in 2021 I decide to resume my university studies.** I spent two years studying engineering in Artificial Intelligence but for personal reasons **I have decided to move to a computer science degree at the SUAyED of the UNAM in Mexico.**
+After working for a couple of years in the automotive industry as a mechatronics technician and stopping my career as a result of the covid-19 pandemic, **in 2021 I decide to resume my university studies.** I spent two years studying engineering in Artificial Intelligence but for personal reasons **I have decided to move to a mathematics degree in Mexico.**
 
 ![UNAM](/assets/img/personal.jpg)
 
