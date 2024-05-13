@@ -238,7 +238,7 @@ int Fibonacci(int n)
 
 ## Conclusion
 
-In summary, if you are just starting out in computer science, it is very important that you understand the different types of algorithmic complexity and their analysis, not only for technical interviews but to develop a thought process that you can take anywhere.🧠
+In summary, if you are just starting out in computer science, it is very important that you understand the different types of algorithmic complexity and their analysis, not only for technical interviews but to develop a thought process that you can take anywhere 🧠
 
 ## References
 
