@@ -4,9 +4,7 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-## Hi there 👋
-
-My name is Jonas Lara, I am originally from Mexico 🇲🇽 but now I am currently moving to the USA 🇺🇸
+Hi there 👋, my name is Jonas Lara, I am originally from Mexico 🇲🇽 but now I am currently moving to the USA 🇺🇸
 
 ## These days
 
