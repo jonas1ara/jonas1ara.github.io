@@ -2,7 +2,7 @@
 title: Algorithms and complexity 📈
 description:  The algorithm is a step-by-step procedure, which defines a set of instructions that will be executed in a certain order to obtain the desired output. Algorithms are usually created independently of the underlying languages, that is, an algorithm can be implemented in more than one programming language.
 Author: Jonas Lara
-date: 2022-11-15 00:00:00 +0000
+date: 2024-05-30 00:00:00 +0000
 categories: [Algorithms, Big O notation, LeetCode]
 tags: [algorithms, complexity, asymptotic notation, leetcode]     # TAG names should always be lowercase
 image:
