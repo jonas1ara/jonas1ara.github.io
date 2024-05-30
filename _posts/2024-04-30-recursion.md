@@ -20,7 +20,7 @@ Recursion is an important concept in programming and refers to the ability of a 
 
 **Suppose we have to get the inventory from a warehouse, which has several shelves, and each shelf has several boxes, to solve this problem we can make use of recursion:**
 
-![Inventory-example](/assets/img/post/recursion/boxes.jpg) _Inventory example_
+![Inventory-example](/assets/img/post/recursion/boxes.png) _Inventory example_
 
 **Is it necessary to understand recursion to understand recursion?**
 
