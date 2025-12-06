@@ -16,10 +16,10 @@ timezone: America/Mexico_City
 
 title: Jonas Lara # the main title
 
-tagline: AI with .NET technlogies # it will display as the sub-title
+tagline: I build business systems in .NET and Microsoft Azure. # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  AI with .NET technlogies
+  I build business systems in .NET and Microsoft Azure.
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
