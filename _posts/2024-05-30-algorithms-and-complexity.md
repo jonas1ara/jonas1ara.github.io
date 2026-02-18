@@ -6,8 +6,8 @@ date: 2024-05-30 00:00:00 +0000
 categories: [Algorithms, Big O notation, LeetCode]
 tags: [algorithms, complexity, asymptotic notation, leetcode]     # TAG names should always be lowercase
 image:
-  path: /assets/img/post/algorithms-and-complexity/algorithm.jpg
-  lqip: https://images.unsplash.com/photo-1642952469120-eed4b65104be?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+  path: /assets/img/post/algorithms-and-complexity/algorithm.png
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithms-and-complexity/algorithm.png
   alt: Algorithm
 ---
 

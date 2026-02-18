@@ -7,7 +7,7 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [arrays, hash table, two pointers, dynamic programming, binary search, kadane, prefix sum]
 image:
   path: /assets/img/post/algorithmic-strategies-for-arrays/arrays-kp.png
-  lqip: https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=1770&auto=format&fit=crop
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-arrays/arrays-kp.png
   alt: Knapsack Problem
 ---
 
