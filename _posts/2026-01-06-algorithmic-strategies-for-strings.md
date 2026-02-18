@@ -6,7 +6,7 @@ date: 2026-01-06 00:00:00 +0000
 categories: [Algorithms, Data Structures, LeetCode]
 tags: [strings, sliding window, two pointers, hash map, stack, palindrome]
 image:
-  path: /assets/img/post/algorithmic-strategies-strings/strings.jpg
+  path: /assets/img/post/algorithmic-strategies-for-strings/strings.png
   lqip: https://images.unsplash.com/photo-1516534775068-ba3e7458af70?q=80&w=1770&auto=format&fit=crop
   alt: String Algorithms
 ---
