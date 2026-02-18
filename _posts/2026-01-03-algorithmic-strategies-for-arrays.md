@@ -8,7 +8,7 @@ tags: [arrays, hash table, two pointers, dynamic programming, binary search, kad
 image:
   path: /assets/img/post/algorithmic-strategies-for-arrays/arrays-kp.png
   lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-arrays/arrays-kp.png
-  alt: Knapsack Problem
+  alt: Knapsack Proble
 ---
 
 ## Introduction
