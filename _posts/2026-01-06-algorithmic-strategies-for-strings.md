@@ -7,7 +7,7 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [strings, sliding window, two pointers, hash map, stack, palindrome]
 image:
   path: /assets/img/post/algorithmic-strategies-for-strings/strings.png
-  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-matrix/matrix.png
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-strings/strings.png
   alt:  Concatenation of two fragments
 ---
 
