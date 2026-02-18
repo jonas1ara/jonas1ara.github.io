@@ -7,8 +7,8 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [matrix, in-place, dfs, backtracking, traversal, spiral]
 image:
   path: /assets/img/post/algorithmic-strategies-for-matrix/matrix.png
-  lqip: https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1770&auto=format&fit=crop
-  alt: Matrix Algorithms
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-strings/strings.png
+  alt: Matrix for editing distance computation
 ---
 
 ## Introduction
