@@ -8,7 +8,7 @@ tags: [algorithms, complexity, asymptotic notation, leetcode]     # TAG names sh
 image:
   path: /assets/img/post/recursion/recursion.png
   lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/recursion/recursion.png
-  alt: Golden ratio
+  alt: Golden spiral
 ---
 
 # Thinking recursively
