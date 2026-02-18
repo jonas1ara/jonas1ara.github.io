@@ -6,7 +6,7 @@ date: 2026-02-18 00:00:00 +0000
 categories: [Algorithms, Data Structures, LeetCode]
 tags: [matrix, in-place, dfs, backtracking, traversal, spiral]
 image:
-  path: /assets/img/post/algorithmic-strategies-matrix/matrix.png
+  path: /assets/img/post/algorithmic-strategies-for-matrix/matrix.png
   lqip: https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1770&auto=format&fit=crop
   alt: Matrix Algorithms
 ---
