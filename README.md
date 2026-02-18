@@ -7,6 +7,6 @@ Installing Dependencies:
 `bundle`
 
 
-Runnig Local Server:
+Running Local Server:
 
-`bundle exec jekyll s`
+`bundle exec jekyll serve`
