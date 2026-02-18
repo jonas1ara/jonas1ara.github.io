@@ -1,5 +1,5 @@
 ---
-title: Recursion🏃🏽🚶🏽🧑🏽‍🦯
+title: Recursion 🌀
 description:  Recursion is a technique that involves solving a problem using a simpler version of it.
 Author: Jonas Lara
 date: 2024-04-30 00:00:00 +0000
