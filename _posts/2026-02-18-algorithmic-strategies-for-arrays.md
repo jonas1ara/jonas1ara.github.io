@@ -29,6 +29,8 @@ When approaching array problems, you'll typically encounter one of these strateg
 
 ## Strategy 1: Hash Table
 
+A **Hash Table** (also known as Hash Map or Dictionary) is a data structure that stores key-value pairs and provides O(1) average-case lookup, insertion, and deletion operations. It works by using a hash function to compute an index into an array of buckets, from which the desired value can be found. In C#, this is implemented as `Dictionary<TKey, TValue>` or `HashSet<T>` for unique values only.
+
 ### When to use it
 
 - Need to find pairs or complements that sum to a target
@@ -88,6 +90,8 @@ public class Solution
 **Key Insight:** HashSet automatically handles uniqueness. If the set size differs from array length, duplicates exist.
 
 ## Strategy 2: Two Pointers
+
+The **Two Pointers** technique uses two pointers (or indices) that traverse the array from different positions - typically one from the start and one from the end, or both moving in the same direction at different speeds. This strategy eliminates the need for nested loops and extra space in many scenarios. It's particularly effective when the array is sorted or when you need to find pairs/triplets that satisfy certain conditions.
 
 ### When to use it
 
@@ -231,6 +235,8 @@ public class Solution
 
 ## Strategy 3: Kadane's Algorithm
 
+**Kadane's Algorithm** is a dynamic programming approach specifically designed to find the maximum sum of a contiguous subarray in O(n) time. The algorithm maintains a running sum and makes a greedy choice at each position: either extend the current subarray or start a new one. This elegant technique was discovered by Jay Kadane in 1984 and has become a classic algorithm for solving maximum subarray problems.
+
 ### When to use it
 
 - Finding maximum/minimum subarray sum
@@ -273,6 +279,8 @@ maxSum = max(maxSum, currentSum)
 
 ## Strategy 4: Dynamic Programming
 
+**Dynamic Programming (DP)** is a powerful algorithmic paradigm that solves complex problems by breaking them down into simpler overlapping subproblems and storing their solutions to avoid redundant computations. It works on the principle of optimal substructure: the optimal solution to a problem contains optimal solutions to its subproblems. DP can be implemented using either top-down (memoization) or bottom-up (tabulation) approaches, and is essential for optimization problems where you need to track multiple states.
+
 ### When to use it
 
 - Problem has optimal substructure
@@ -309,6 +317,8 @@ public class Solution
 **Key Insight:** Track two states: maximum profit after buying and maximum profit after selling. Update both states at each price point.
 
 ## Strategy 5: Prefix/Postfix
+
+**Prefix/Postfix** (also known as Prefix Sum or Cumulative Sum) is a preprocessing technique where you compute cumulative values from left to right (prefix) and/or right to left (postfix) through an array. This allows you to answer range queries or compute values that depend on all other elements in O(1) or O(n) time instead of O(n²). The prefix array at index i contains the cumulative result of all elements from 0 to i, while postfix contains results from i to n-1.
 
 ### When to use it
 
@@ -355,6 +365,8 @@ public class Solution
 **Key Insight:** First pass stores prefix products. Second pass multiplies by postfix products on-the-fly. This avoids division and handles zeros naturally.
 
 ## Strategy 6: Binary Search
+
+**Binary Search** is a divide-and-conquer algorithm that efficiently searches for a target value in a sorted array by repeatedly dividing the search interval in half. It compares the target with the middle element and eliminates half of the remaining elements based on the comparison. This logarithmic time complexity makes it dramatically faster than linear search for large datasets. Binary search requires the data to be sorted (or have some monotonic property) to work correctly.
 
 ### When to use it
 
@@ -447,6 +459,8 @@ public class Solution
 **Key Insight:** First find the rotation point, then perform binary search with modulo arithmetic to handle the rotation.
 
 ## Strategy 7: Brute Force
+
+**Brute Force** is the most straightforward problem-solving approach that tries all possible solutions without any optimization. It typically involves nested loops that exhaustively check every combination or possibility until finding the answer. While simple to implement and understand, brute force solutions often have poor time complexity (O(n²), O(n³), or worse) and are not suitable for large inputs. However, they serve as an excellent starting point for understanding a problem and establishing correctness before optimization.
 
 ### When to use it
 
