@@ -16,10 +16,10 @@ timezone: America/Mexico_City
 
 title: Jonas Lara # the main title
 
-tagline: Algorithms, Functional programming and Compilers. # it will display as the sub-title
+tagline: "Focused on: Advanced Algorithms, Compilers, F#, C#, High-Perf .NET, Backend, CLI Tools, SQL Hacks & Mathematics."
 
 description: >- # used by seo meta and the atom feed
-  Algorithms, Functional programming and Compilers.
+  "Focused on: Advanced Algorithms, Compilers, F#, C#, High-Perf .NET, Backend, CLI Tools, SQL Hacks & Mathematics."
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
