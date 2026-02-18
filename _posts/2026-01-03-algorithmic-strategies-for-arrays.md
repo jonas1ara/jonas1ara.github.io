@@ -2,7 +2,7 @@
 title: Algorithmic Strategies for Arrays 🧩
 description: Master the most common algorithmic strategies to solve array problems in LeetCode. Learn how to identify patterns and apply the right approach with real C# implementations.
 Author: Jonas Lara
-date: 2026-02-18 00:00:00 +0000
+date: 2026-01-03 00:00:00 +0000
 categories: [Algorithms, Data Structures, LeetCode]
 tags: [arrays, hash table, two pointers, dynamic programming, binary search, kadane, prefix sum]
 image:

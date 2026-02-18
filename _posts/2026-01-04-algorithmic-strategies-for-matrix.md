@@ -2,7 +2,7 @@
 title: Algorithmic Strategies for Matrix 🔲
 description: Master the essential algorithmic strategies to solve matrix problems in LeetCode. Learn in-place manipulation, traversal patterns, and backtracking with real C# implementations.
 Author: Jonas Lara
-date: 2026-02-18 00:00:00 +0000
+date: 2026-01-04 00:00:00 +0000
 categories: [Algorithms, Data Structures, LeetCode]
 tags: [matrix, in-place, dfs, backtracking, traversal, spiral]
 image:
