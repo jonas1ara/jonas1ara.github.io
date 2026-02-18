@@ -8,7 +8,7 @@ tags: [matrix, in-place, dfs, backtracking, traversal, spiral]
 image:
   path: /assets/img/post/algorithmic-strategies-for-matrix/matrix.png
   lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-strings/strings.png
-  alt: Matrix for editing distance computatio
+  alt: Matrix for editing distance computation
 ---
 
 ## Introduction
