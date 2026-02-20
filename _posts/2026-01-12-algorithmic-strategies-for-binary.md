@@ -7,8 +7,8 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [binary, bit manipulation, xor, brian kernighan, bits, bitwise]
 image:
   path: /assets/img/post/algorithmic-strategies-for-binary/binary.jpg
-  lqip: https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop
-  alt: Binary Algorithms
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-binary/binary.jpg
+  alt: Negated-input AND
 ---
 
 ## Introduction

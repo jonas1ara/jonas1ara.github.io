@@ -7,8 +7,8 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [intervals, sorting, greedy, merge, scheduling]
 image:
   path: /assets/img/post/algorithmic-strategies-for-intervals/intervals.png
-  lqip: https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=1770&auto=format&fit=crop
-  alt: Interval Algorithms
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-intervals/intervals.png
+  alt: Discrete Fourier Transform
 ---
 
 ## Introduction

@@ -7,8 +7,8 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [linked lists, two pointers, recursion, fast and slow pointers, floyd's cycle detection, merge sort]
 image:
   path: /assets/img/post/algorithmic-strategies-for-ll/linked-lists.png
-  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-linked-lists/linked-lists-kp.png
-  alt: Linked List Visualization
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-ll/linked-lists.png
+  alt: Algorithmic complexity of linked list operations
 ---
 
 ## Introduction

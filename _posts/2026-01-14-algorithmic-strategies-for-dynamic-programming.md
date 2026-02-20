@@ -7,8 +7,8 @@ categories: [Algorithms, Data Structures, LeetCode]
 tags: [dynamic programming, dp, memoization, tabulation, optimization]
 image:
   path: /assets/img/post/algorithmic-strategies-for-dp/dp.png
-  lqip: https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=1770&auto=format&fit=crop
-  alt: Dynamic Programming
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/algorithmic-strategies-for-dp/dp.png
+  alt: Morphing a lobster into a head via dynamic programming
 ---
 
 ## Introduction
