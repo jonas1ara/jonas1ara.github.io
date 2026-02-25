@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Strings 📝
+title: Algorithmic Strategies for Strings
 description: Master the essential algorithmic strategies to solve string problems in LeetCode. Learn sliding window, two pointers, hash maps, and stack-based techniques with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-06 00:00:00 +0000

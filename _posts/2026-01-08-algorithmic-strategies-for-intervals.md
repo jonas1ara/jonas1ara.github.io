@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Intervals ⏱️
+title: Algorithmic Strategies for Intervals
 description: Master the essential algorithmic strategies to solve interval problems in LeetCode. Learn sorting, greedy algorithms, and merging techniques with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-08 00:00:00 +0000

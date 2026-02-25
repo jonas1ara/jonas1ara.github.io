@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Matrix 🔲
+title: Algorithmic Strategies for Matrix
 description: Master the essential algorithmic strategies to solve matrix problems in LeetCode. Learn in-place manipulation, traversal patterns, and backtracking with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-04 00:00:00 +0000

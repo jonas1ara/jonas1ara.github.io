@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Heaps ⛰️
+title: Algorithmic Strategies for Heaps
 description: Master the most common algorithmic strategies to solve heap problems in LeetCode. Learn how to identify patterns and apply the right approach with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-24 00:00:00 +0000

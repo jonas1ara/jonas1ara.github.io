@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Trees 🌲
+title: Algorithmic Strategies for Trees
 description: Master the most common algorithmic strategies to solve tree problems in LeetCode. Learn how to identify patterns and apply the right approach with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-20 00:00:00 +0000

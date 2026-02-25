@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Binary 🔢
+title: Algorithmic Strategies for Binary
 description: Master bit manipulation techniques to solve binary problems in LeetCode. Learn XOR tricks, Brian Kernighan's algorithm, and dynamic programming for bits with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-12 00:00:00 +0000

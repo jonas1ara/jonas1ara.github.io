@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Dynamic Programming 💡
+title: Algorithmic Strategies for Dynamic Programming
 description: Master dynamic programming strategies to solve optimization problems in LeetCode. Learn bottom-up, top-down, memoization, and tabulation with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-14 00:00:00 +0000

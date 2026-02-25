@@ -1,5 +1,5 @@
 ---
-title: Algorithmic Strategies for Graphs 🕸️
+title: Algorithmic Strategies for Graphs
 description: Master the most common algorithmic strategies to solve graph problems in LeetCode. Learn how to identify patterns and apply the right approach with real C# implementations.
 Author: Jonas Lara
 date: 2026-01-30 00:00:00 +0000
