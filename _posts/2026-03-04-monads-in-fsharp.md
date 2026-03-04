@@ -251,6 +251,44 @@ The state environment:
 - Automatically threads the state (seed) through each computation
 - Returns both the result and final state
 
+> **Note:** This example demonstrates the State monad pattern. In production, F# has thread-safe random generators like `System.Random.Shared` (.NET 6+) or `System.Security.Cryptography.RandomNumberGenerator` for cryptographic purposes.
+
+**Production Random Number Examples:**
+
+```fsharp
+open System
+open System.Security.Cryptography
+
+// Thread-safe random using System.Random.Shared (.NET 6+)
+let generateRandomNumbers count =
+    List.init count (fun _ -> Random.Shared.Next(1, 100))
+
+// Usage
+let numbers = generateRandomNumbers 5
+// Output: [42; 17; 89; 3; 55]
+
+// Cryptographically secure random bytes
+let generateSecureToken length =
+    let bytes = Array.zeroCreate<byte> length
+    RandomNumberGenerator.Fill(bytes)
+    Convert.ToBase64String(bytes)
+
+// Usage
+let token = generateSecureToken 32
+// Output: "4KJ2k3j4h5k6j7h8k9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6=="
+
+// Cryptographically secure random integer
+let generateSecureInt minValue maxValue =
+    use rng = RandomNumberGenerator.Create()
+    let bytes = Array.zeroCreate<byte> 4
+    rng.GetBytes(bytes)
+    let randomInt = BitConverter.ToInt32(bytes, 0) &&& Int32.MaxValue
+    minValue + (randomInt % (maxValue - minValue + 1))
+
+// Usage
+let secureRandom = generateSecureInt 1 100
+```
+
 ### 7. Reader Monad: Dependency Injection
 
 The Reader monad handles passing dependencies or configuration through your code without explicitly threading them everywhere.
@@ -359,7 +397,9 @@ let result = getUserData 123 myConfig
 
 ### 8. Async Monad: Asynchronous Operations
 
-F# has built-in `async` computation expressions that handle asynchronous operations elegantly. Unlike the delayed monad, async can also handle multi-threading and concurrent computations.
+F# has built-in `async { }` computation expressions (no need to define AsyncBuilder - it's native!). This handles asynchronous operations elegantly, managing multi-threading and concurrent computations.
+
+> **Note:** F# includes an `async { }` builder natively, so you don't always define a custom one. The pattern is identical to other monads.
 
 **The Problem: Callback Hell**
 
@@ -377,71 +417,122 @@ DownloadFile("url1", content1 => {
 });
 ```
 
-**The F# Solution:**
+**The F# Solution with Native Async:**
 
 ```fsharp
-let workflow = 
+open System.Net.Http
+
+// Make HTTP request asynchronously
+let fetchData url = 
     async {
-        let! content1 = downloadFile "url1"
-        let! result1 = processData content1
-        
-        let! content2 = downloadFile "url2"
-        let! result2 = processData content2
-        
-        let final = combine result1 result2
-        return final
+        use client = new HttpClient()
+        let! response = client.GetStringAsync(url) |> Async.AwaitTask
+        return response
     }
 
-// Execute asynchronously
-let result = Async.RunSynchronously workflow
+// Compose multiple async operations
+let fetchAndCombine () = 
+    async {
+        let! data1 = fetchData "https://api.example.com/users"
+        let! data2 = fetchData "https://api.example.com/posts"
+        return sprintf "Users: %s\nPosts: %s" data1 data2
+    }
+
+// Execute: blocks current thread until complete
+let result = Async.RunSynchronously (fetchAndCombine())
+
+// Or: start as a Task for better integration
+let task = Async.StartAsTask (fetchAndCombine())
 ```
 
 **Parallel Operations:**
 
 ```fsharp
-let parallelWorkflow = 
+open System.IO
+
+// Read multiple files in parallel
+let readFilesParallel filenames = 
     async {
-        // Run both downloads in parallel
         let! contents = 
-            [ downloadFile "url1"
-              downloadFile "url2"
-              downloadFile "url3" ]
-            |> Async.Parallel
+            filenames
+            |> List.map (fun name -> 
+                async {
+                    let! text = File.ReadAllTextAsync(name) |> Async.AwaitTask
+                    return (name, text)
+                })
+            |> Async.Parallel  // Execute all in parallel!
         
-        // Process results
-        return contents |> Array.sum
+        return contents |> Array.toList
     }
+
+// Usage
+let files = ["file1.txt"; "file2.txt"; "file3.txt"]
+let results = readFilesParallel files |> Async.RunSynchronously
 ```
 
 **Key Features:**
 
-- **Non-blocking**: Doesn't block threads while waiting
-- **Composable**: Chain async operations naturally
-- **Parallel**: Run multiple operations concurrently
-- **Sequential reading**: Code reads top-to-bottom despite async nature
+- **Built-in**: No custom builder needed, F# includes it natively
+- **Non-blocking**: Doesn't block threads while waiting for I/O
+- **Composable**: Chain async operations naturally with `let!`
+- **Parallel execution**: Use `Async.Parallel` to run multiple operations concurrently
+- **Task interop**: Convert to/from .NET Tasks with `Async.AwaitTask` and `Async.StartAsTask`
 
-**Real-World Example:**
+**Real-World Example: API + Database**
 
 ```fsharp
-let fetchUserProfile userId = 
+open System.Data.SqlClient
+
+let getUserWithOrders userId = 
     async {
-        let! user = Database.getUser userId
-        let! posts = Database.getUserPosts userId
-        let! comments = Database.getUserComments userId
+        // Database query
+        let! user = 
+            async {
+                use conn = new SqlConnection(connectionString)
+                let! _ = conn.OpenAsync() |> Async.AwaitTask
+                use cmd = new SqlCommand("SELECT * FROM Users WHERE Id = @id", conn)
+                cmd.Parameters.AddWithValue("@id", userId) |> ignore
+                let! reader = cmd.ExecuteReaderAsync() |> Async.AwaitTask
+                // ... read user data
+                return user
+            }
         
-        return {
-            User = user
-            Posts = posts
-            Comments = comments
-        }
+        // API call
+        let! orders = 
+            async {
+                use client = new HttpClient()
+                let! json = client.GetStringAsync($"https://api.orders.com/user/{userId}") 
+                            |> Async.AwaitTask
+                return parseOrders json
+            }
+        
+        return { User = user; Orders = orders }
     }
 
-// Fetch multiple users in parallel
-let fetchAllProfiles userIds =
+// Execute multiple users in parallel
+let getAllUsersData userIds =
     userIds
-    |> List.map fetchUserProfile
+    |> List.map getUserWithOrders
     |> Async.Parallel
     |> Async.RunSynchronously
+```
+
+**Execution Options:**
+
+```fsharp
+let myAsyncWork = async { return 42 }
+
+// 1. Block until complete (synchronous)
+let result1 = Async.RunSynchronously myAsyncWork
+
+// 2. Start as background task (fire and forget)
+Async.Start myAsyncWork
+
+// 3. Convert to Task for C# interop
+let task = Async.StartAsTask myAsyncWork
+
+// 4. Start immediately and get Async<'T>
+let asyncResult = Async.StartChild myAsyncWork
 ```
 
 **Comparison with Delayed Monad:**
