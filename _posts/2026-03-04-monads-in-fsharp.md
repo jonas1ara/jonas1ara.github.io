@@ -399,8 +399,6 @@ let result = getUserData 123 myConfig
 
 F# has built-in `async { }` computation expressions (no need to define AsyncBuilder - it's native!). This handles asynchronous operations elegantly, managing multi-threading and concurrent computations.
 
-> **Note:** F# includes an `async { }` builder natively, so you don't always define a custom one. The pattern is identical to other monads.
-
 **The Problem: Callback Hell**
 
 ```csharp
