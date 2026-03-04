@@ -251,6 +251,208 @@ The state environment:
 - Automatically threads the state (seed) through each computation
 - Returns both the result and final state
 
+### 7. Reader Monad: Dependency Injection
+
+The Reader monad handles passing dependencies or configuration through your code without explicitly threading them everywhere.
+
+**The Problem: Boilerplate Dependency Threading**
+
+```fsharp
+// Without Reader - passing logger everywhere
+let f x logger =
+    let res = x * 1
+    logger res
+    res
+
+let g x logger =
+    let res = x * 2
+    logger res
+    res
+
+let h x logger =
+    let res = x * 3
+    logger res
+    res
+
+// Must pass logger to every function
+let result =
+    let a = f 10 logger
+    let b = g 20 logger
+    let c = h 30 logger
+    a + b + c
+```
+
+Notice the repetitive `logger` parameter in every function call!
+
+**The F# Solution:**
+
+```fsharp
+let reader = ReaderBuilder()
+
+// Functions that expect a logger but don't require it yet
+let f1 x logger =
+    let res = x * 1
+    logger res
+    res
+
+let f2 x logger =
+    let res = x * 2
+    logger res
+    res
+
+let f3 x logger =
+    let res = x * 3
+    logger res
+    res
+
+// Compose without providing logger
+let computation = 
+    reader {
+        let! a = f1 10000
+        let! b = f2 1000
+        let! c = f3 100
+        return a + b + c
+    }
+
+// Provide logger only once at the end
+let result = computation ConsoleLogger
+```
+
+**Key Benefits:**
+
+- Functions still need the dependency, but you don't thread it manually
+- The Reader environment automatically passes it through the chain
+- Provide the dependency once at execution time
+- Cleaner, more composable code
+
+**Real-World Example:**
+
+```fsharp
+type Config = {
+    DatabaseConnection: string
+    ApiKey: string
+    Timeout: int
+}
+
+let fetchUser userId = 
+    reader {
+        let! config = ask  // Get config from environment
+        return! queryDatabase config.DatabaseConnection userId
+    }
+
+let fetchOrders userId =
+    reader {
+        let! config = ask
+        return! queryDatabase config.DatabaseConnection $"orders/{userId}"
+    }
+
+let getUserData userId =
+    reader {
+        let! user = fetchUser userId
+        let! orders = fetchOrders userId
+        return (user, orders)
+    }
+
+// Execute with configuration
+let result = getUserData 123 myConfig
+```
+
+### 8. Async Monad: Asynchronous Operations
+
+F# has built-in `async` computation expressions that handle asynchronous operations elegantly. Unlike the delayed monad, async can also handle multi-threading and concurrent computations.
+
+**The Problem: Callback Hell**
+
+```csharp
+// C# without async/await - nested callbacks
+DownloadFile("url1", content1 => {
+    ProcessData(content1, result1 => {
+        DownloadFile("url2", content2 => {
+            ProcessData(content2, result2 => {
+                var final = Combine(result1, result2);
+                Console.WriteLine(final);
+            });
+        });
+    });
+});
+```
+
+**The F# Solution:**
+
+```fsharp
+let workflow = 
+    async {
+        let! content1 = downloadFile "url1"
+        let! result1 = processData content1
+        
+        let! content2 = downloadFile "url2"
+        let! result2 = processData content2
+        
+        let final = combine result1 result2
+        return final
+    }
+
+// Execute asynchronously
+let result = Async.RunSynchronously workflow
+```
+
+**Parallel Operations:**
+
+```fsharp
+let parallelWorkflow = 
+    async {
+        // Run both downloads in parallel
+        let! contents = 
+            [ downloadFile "url1"
+              downloadFile "url2"
+              downloadFile "url3" ]
+            |> Async.Parallel
+        
+        // Process results
+        return contents |> Array.sum
+    }
+```
+
+**Key Features:**
+
+- **Non-blocking**: Doesn't block threads while waiting
+- **Composable**: Chain async operations naturally
+- **Parallel**: Run multiple operations concurrently
+- **Sequential reading**: Code reads top-to-bottom despite async nature
+
+**Real-World Example:**
+
+```fsharp
+let fetchUserProfile userId = 
+    async {
+        let! user = Database.getUser userId
+        let! posts = Database.getUserPosts userId
+        let! comments = Database.getUserComments userId
+        
+        return {
+            User = user
+            Posts = posts
+            Comments = comments
+        }
+    }
+
+// Fetch multiple users in parallel
+let fetchAllProfiles userIds =
+    userIds
+    |> List.map fetchUserProfile
+    |> Async.Parallel
+    |> Async.RunSynchronously
+```
+
+**Comparison with Delayed Monad:**
+
+| Feature | Delayed Monad | Async Monad |
+|---------|---------------|-------------|
+| Purpose | Define computation without running it | Handle async I/O and concurrency |
+| Execution | Single-threaded, lazy | Multi-threaded capable |
+| Use Case | Defer evaluation | Network calls, file I/O |
+| Built-in | No (custom) | Yes (F# native) |
+
 ## The Pattern: Environment-Based Computation
 
 All monads follow the same pattern:
