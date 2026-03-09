@@ -1562,7 +1562,7 @@ Every arrow is differentiable because `Value` records the computation. The backw
 
 There's a neat recursion hiding in this project: we built a language model, and the language model was built with functional programming principles. Those two things are not a coincidence.
 
-Think about what the `Value` class actually is. It's a pure function frozen in time:
+Consider what the `Value` class really represents. **It's a pure function frozen in time:**
 
 ```fsharp
 // Every operation is: (inputs) → (output, local gradients)
@@ -1578,7 +1578,7 @@ This is exactly the property that makes the backward pass mechanically correct: 
 
 Now consider the other side of the title: *LLMs love code with explicit inputs/outputs and no side effects.*
 
-When a language model is trained — including the one in this script — it learns statistical patterns over sequences. Code that follows functional conventions is dramatically easier to predict:
+When a language model is trained — including the one in this script — it learns statistical patterns over sequences. Code written in a functional style is dramatically easier for a language model to predict:
 
 - A pure function's output is fully determined by its inputs. The model only needs to understand the local context — not track what mutations happened elsewhere.
 - Explicit types and immutability mean that every variable's meaning is stable. `allChars` is always the same sorted array of characters. `encode` always maps the same character to the same integer. There's nothing to track.
@@ -1591,6 +1591,8 @@ F# enforces these properties by default. `mutable` is opt-in. Functions are valu
 The forward pass of a GPT is essentially a pure function: `gpt(tokenId, posId, keys, values) → logits`. The backward pass is its inverse. Adam is a stateful update rule operating on arrays with no aliasing. Every piece of this system was designed — consciously or not — around the principle that computation should be transparent, inputs and outputs should be explicit, and side effects should be contained.
 
 That's not a coincidence. That's why this model can learn at all.
+
+And perhaps that's also why building these things in F# feels so satisfying.
 
 ---
 ## References
