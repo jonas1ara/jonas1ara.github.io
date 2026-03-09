@@ -1576,7 +1576,7 @@ Given the same inputs, it always produces the same output. The inputs and output
 
 This is exactly the property that makes the backward pass mechanically correct: because every node's relationship to its children is fully described by `LocalGrads`, you can reverse the entire computation by reading those arrays in reverse topological order. No surprises. No special cases. No "it depends on what happened earlier."
 
-Now consider the other side of the title: *LLMs love code with explicit inputs/outputs and no side effects.*
+Now consider the other side: the language model itself.
 
 When a language model is trained — including the one in this script — it learns statistical patterns over sequences. Code written in a functional style is dramatically easier for a language model to predict:
 
