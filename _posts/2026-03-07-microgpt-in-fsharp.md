@@ -320,7 +320,7 @@ For each head `h`:
 
 1. Extract the `head_dim`-sized slice of Q from position `h * head_dim`
 2. For every past token `t`, compute a dot product between current Q and past K — this is the "how relevant is token t to my current query?" score
-3. Divide by `√head_dim` to prevent dot products from growing too large (which would saturate softmax)
+3. Divide by `√head_dim` (scaled dot-product) — without this scaling, dot products grow with `head_dim` because they are a sum of `head_dim` multiplications. Large values push softmax into saturation regions where gradients vanish to near zero, making training unstable
 4. Softmax over all scores to get attention weights (they sum to 1)
 5. Compute the weighted sum of all past V vectors — the output is "what I should attend to"
 
@@ -407,14 +407,16 @@ for i in 0 .. nEmbd - 1 do
 
 #### Step 5 — MLP Block + Second Residual
 
-Every transformer layer also has a feed-forward network (MLP) applied position-wise. It expands the dimension by 4× (`mlp_fc1`), applies ReLU non-linearity, then compresses back (`mlp_fc2`). Another residual connection wraps it.
+Every transformer layer also has a feed-forward network (MLP) applied position-wise. It expands the dimension by 4× (`mlp_fc1`), applies a non-linearity, then compresses back (`mlp_fc2`). Another residual connection wraps it.
+
+> **ReLU, not GELU.** Modern transformers (GPT-2, GPT-3, LLaMA) use GELU as the MLP activation — it's smooth and has non-zero gradients for slightly negative inputs, which improves training dynamics. microgpt deliberately uses **ReLU** (`max(0, x)`) for simplicity: it's dead-simple to implement in scalar autograd (gradient is exactly 0 or 1), and it's enough for a character-level toy model. If you wanted to extend this to a larger model, swapping ReLU for GELU would be one of the first changes to make.
 
 **Python:**
 ```python
 x_residual2 = list(x)
 x = rms_norm(x)
 x = linear(x, state[f"layer{li}.mlp_fc1"])   # expand: n_embd → 4*n_embd
-x = [xi.relu() for xi in x]                  # non-linearity
+x = [xi.relu() for xi in x]                  # ReLU (not GELU — intentional)
 x = linear(x, state[f"layer{li}.mlp_fc2"])   # compress: 4*n_embd → n_embd
 x = [xi + ri for xi, ri in zip(x, x_residual2)]   # + residual
 ```
@@ -424,7 +426,7 @@ x = [xi + ri for xi, ri in zip(x, x_residual2)]   # + residual
 let xResidual2 = ResizeArray x
 x <- rmsNorm x
 x <- linear x stateDict.[sprintf "layer%d.mlp_fc1" li]   // expand
-x <- ResizeArray(x |> Seq.map (fun xi -> xi.Relu()))      // non-linearity
+x <- ResizeArray(x |> Seq.map (fun xi -> xi.Relu()))      // ReLU (not GELU — intentional)
 x <- linear x stateDict.[sprintf "layer%d.mlp_fc2" li]   // compress
 for i in 0 .. nEmbd - 1 do
     x.[i] <- x.[i] + xResidual2.[i]   // + residual
@@ -475,6 +477,21 @@ token_id, pos_id
     ▼
   linear(lm_head)  →  logits   (shape: vocab_size)
 ```
+
+---
+
+### Python vs F# at a Glance
+
+| Component | Python (microgpt) | F# (this impl) | Advantage in F# |
+|---|---|---|---|
+| **Autograd** | `Value` class with Python lists | `Value` with flat `float[]` arrays | Better memory locality, SIMD-ready |
+| **Backward pass** | Recursive DFS | Iterative with `Stack<struct>` | No stack overflow, zero heap alloc per node |
+| **Operators** | Dunder methods (`__mul__`, `__add__`) | Static members + operator overloading | More idiomatic, composable |
+| **KV cache** | Python lists with `.append()` | `ResizeArray` (controlled mutability) | Explicit mutation intent, same O(1) amortized |
+| **Activation** | `relu` (scalar) | `Relu()` (scalar) | Identical — ReLU intentional for simplicity |
+| **Dot product** | `sum(a * b for a, b in zip(...))` | SIMD `Vector<float>` loop | 4× throughput on AVX2 |
+| **Data flow** | Imperative rebinding | `|>` pipelines + explicit `mutable` | Mutation visible and localized |
+| **Composition** | Lambdas / loops | `Seq.map`, `Seq.fold`, `Array.init` | Reads as a transformation pipeline |
 
 ---
 
