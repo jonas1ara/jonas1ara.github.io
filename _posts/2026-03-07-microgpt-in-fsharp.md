@@ -6,9 +6,9 @@ date: 2026-03-07 00:00:00 +0000
 categories: [Functional Programming, F#, Machine Learning]
 tags: [fsharp, gpt, transformers, dotnet, simd, autograd, machine learning]
 image:
-  path: /assets/img/post/microgpt-in-fsharp/microgpt.png
-  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/microgpt-in-fsharp/microgpt.png
-  alt: MicroGPT in F#
+  path: /assets/img/post/microgpt-in-fsharp/microgpt-in-fsharp.png
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/microgpt-in-fsharp/microgpt-in-fsharp.png
+  alt: GPT original architecture diagram from "Attention is All You Need" paper
 ---
 
 # MicroGPT in F#
