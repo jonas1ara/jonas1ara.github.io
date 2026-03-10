@@ -8,7 +8,7 @@ tags: [fsharp, gpt, transformers, dotnet, autograd, machine learning]
 image:
   path: /assets/img/post/microgpt-in-fsharp/microgpt-in-fsharp.png
   lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post/microgpt-in-fsharp/microgpt-in-fsharp.png
-  alt: MicroGPT in F#
+  alt: GPT Original Architecture
 ---
 
 # MicroGPT in F#
