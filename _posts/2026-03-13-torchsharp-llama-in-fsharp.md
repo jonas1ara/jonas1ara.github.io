@@ -673,5 +673,5 @@ and it has a lot of features that many developers appreciate:
 - **[ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp)** — Inspiration for running LLMs natively without Python.
 - **[Microsoft.ML.GenAI.LLaMA](https://github.com/dotnet/machinelearning/tree/main/src/Microsoft.ML.GenAI.LLaMA)** — Official LLaMA in ML.NET, also on TorchSharp.
 - **[hkproj/pytorch-llama](https://github.com/hkproj/pytorch-llama)** — Pedagogical reference for the Llama architecture.
-- 📹 [Coding LLaMA 2 from scratch in PyTorch — Umar Jamil](https://www.youtube.com/watch?v=oM4VmoabDAI)
-- 📹 [But what is a GPT? — 3Blue1Brown](https://www.youtube.com/watch?v=eMlx5fFNoYc)
+- **[Coding LLaMA 2 from scratch in PyTorch](https://www.youtube.com/watch?v=oM4VmoabDAI)** — Umar Jamil
+- **[But what is a GPT?](https://www.youtube.com/watch?v=eMlx5fFNoYc)** — 3Blue1Brown
