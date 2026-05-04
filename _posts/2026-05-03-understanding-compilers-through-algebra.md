@@ -684,7 +684,7 @@ Step 5: CODE GENERATION
 
 You've mastered the fundamentals of compiler design. Now it's time to take the next step:
 
-**[Part 2: Building a Better Algebraic Compiler - Advanced Techniques](2026-05-04-building-better-algebraic-compiler.md)** covers:
+**[Part 2: Building a Better Algebraic Compiler - Advanced Techniques]({{ "/posts/building-better-algebraic-compiler/" | relative_url }})** covers:
 
 - ✅ **Error Recovery**: How real compilers handle multiple errors
 - ✅ **Optimization Passes**: Making generated code faster

@@ -5,12 +5,15 @@ Author: Jonas Lara
 date: 2026-05-04 00:00:00 +0000
 categories: [Compiler Design, F#, Programming Languages, Advanced]
 tags: [fsharp, compiler, optimization, jit, aot, advanced-techniques, language-design]
-
+image:
+  path: /assets/img/post/understanding-compilers-through-algebra/algebra.jpg
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/post-understanding-compilers-through-algebra/algebra.jpg
+  alt: Algebraic expression with variables and numbers
 ---
 
 # Building a Better Algebraic Compiler - Advanced Techniques
 
-In [Part 1: Understanding Compilers Through Algebra](2026-05-03-understanding-compilers-through-algebra.md), we built a working compiler from scratch. We tokenized input, parsed expressions, analyzed semantics, and generated code.
+In [Part 1: Understanding Compilers Through Algebra]({{ "/posts/understanding-compilers-through-algebra/" | relative_url }}), we built a working compiler from scratch. We tokenized input, parsed expressions, analyzed semantics, and generated code.
 
 But production compilers do much more. In this second part, we'll explore advanced techniques that separate toy compilers from real-world tools: error recovery, optimization passes, different compilation models (JIT vs AoT), and we'll study how production F# compilers solve these same problems at industrial scale.
 
