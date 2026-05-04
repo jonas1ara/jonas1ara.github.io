@@ -13,8 +13,6 @@ image:
 
 # Building a Better Algebraic Compiler - Advanced Techniques
 
-> "Si entiendes compiladores, entiendes optimización, estructuras de datos, teoría de lenguajes, y cómo piensa una máquina. Es una de las habilidades más transferibles en ingeniería."
-
 In [Part 1: Understanding Compilers Through Algebra](2026-05-03-understanding-compilers-through-algebra.md), we built a working compiler from scratch. We tokenized input, parsed expressions, analyzed semantics, and generated code.
 
 But production compilers do much more. In this second part, we'll explore advanced techniques that separate toy compilers from real-world tools: error recovery, optimization passes, different compilation models (JIT vs AoT), and we'll study how production F# compilers solve these same problems at industrial scale.
@@ -807,7 +805,7 @@ This foundation applies to **any compiler**: from simple DSLs to full programmin
 
 ---
 
-*"We all use compilers, but almost no one understands how they work. Building a small one changes the way you see any language."*
+*“If you understand compilers, you understand optimization, data structures, language theory, and how a machine thinks. It’s one of the most transferable skills in engineering.”*
 
 **Next Steps**:
 1. Clone the [Algebraic Tiny Compiler](https://github.com/jonas1ara/algebraic-tiny-compiler) repository
@@ -815,5 +813,3 @@ This foundation applies to **any compiler**: from simple DSLs to full programmin
 3. Add optimization passes (constant folding, dead code elimination)
 4. Extend to support function definitions: `f(x) = 2x + 3`
 5. Build your own simple DSL using these same techniques
-
-Happy compiling! 🚀
