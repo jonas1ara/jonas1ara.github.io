@@ -699,4 +699,4 @@ In Part 2, we'll also explore:
 
 ---
 
-*Ready for the challenge? Continue to [Part 2](2026-05-04-building-better-algebraic-compiler.md)* 🚀
+[Part 2: Building a Better Algebraic Compiler - Advanced Techniques]({{ "/posts/building-better-algebraic-compiler/" | relative_url }}) is available now! Dive deeper into compiler design and see how production compilers solve real-world problems at scale.

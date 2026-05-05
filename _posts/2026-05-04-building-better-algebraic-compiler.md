@@ -795,7 +795,7 @@ This foundation applies to **any compiler**: from simple DSLs to full programmin
 
 ## References
 
-- [Blog Post: Understanding Compilers Through Algebra](2026-05-03-understanding-compilers-through-algebra.md)
+- [Blog Post: Understanding Compilers Through Algebra]({{ "/posts/understanding-compilers-through-algebra/" | relative_url }})
 - [F# Language Reference](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/)
 - [F# Discriminated Unions](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions)
 - [F# Pattern Matching](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/pattern-matching)
