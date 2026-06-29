@@ -70,6 +70,56 @@ sequenceDiagram
     PortalMVC->>Browser: Shows success modal (SweetAlert2)
 ```
 
+### Client-Side Offloading: Hybrid Face Detection with MediaPipe
+
+A naive implementation of facial recognition would stream the webcam video feed directly to the backend, or have the server process every single frame to detect whether a face is in the image. On a CPU-only server serving nearly 1000 users, running a continuous face face detection model like RetinaFace or MTCNN for multiple active clients would instantly saturate the CPU.
+
+To solve this, **Asistencia** implements a hybrid architecture:
+
+#### 1. Client-Side Detection (MediaPipe)
+The frontend browser loads Google's MediaPipe `FaceDetector` (using the lightweight `blaze_face_short_range.tflite` model delegating execution to the user's local GPU/CPU if available). The browser runs a fast, real-time loop checking the webcam feed locally:
+
+```javascript
+// Load MediaPipe Face Detector in the browser
+const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/wasm"
+);
+const faceDetector = await FaceDetector.createFromOptions(vision, {
+    baseOptions: {
+        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite`,
+        delegate: "GPU"
+    },
+    runningMode: "VIDEO"
+});
+
+// Detection loop on webcam frame
+const detections = faceDetector.detectForVideo(video, startTimeMs).detections;
+if (detections && detections.length > 0) {
+    isDetecting = false; // Pause detection while processing
+    processAttendance();  // Trigger base64 capture
+}
+```
+
+#### 2. User Alignment Guidance
+The frontend UI overlays a circular guide. By prompting the user to align their face inside the circle, we guarantee that when a face is detected and captured, the face is already centered and takes up a consistent portion of the image.
+
+#### 3. Single API Call
+Only when MediaPipe confirms a face is present, the frontend draws a single frame onto a canvas, converts it to base64, and sends it as a POST request to the API:
+
+```javascript
+const context = canvas.getContext("2d");
+context.translate(canvas.width, 0);
+context.scale(-1, 1); // mirror effect
+context.drawImage(video, 0, 0, canvas.width, canvas.height);
+context.setTransform(1, 0, 0, 1, 0, 0); // restore matrix
+
+// Extract raw Base64 representation (JPEG format)
+const rawBase64 = canvas.toDataURL("image/jpeg", 0.9);
+const base64Data = rawBase64.split(",")[1];
+```
+
+As a result, the server performs **zero face detection**. It receives an already-centered face snapshot, instantly scales it to 112x112, and runs a single inference pass through ArcFace ONNX. This keeps the server's CPU load at virtually zero until a check-in is actually triggered.
+
 ---
 
 ## 3. Input Tensor Preparation (NHWC) in C#
@@ -94,14 +144,14 @@ Here is how the Base64 image is decoded, resized to 112x112, and loaded into the
 
 ```csharp
 // 1. Decode Base64 to bytes and load the image
-byte[] imageBytes = Convert.FromBase64String(fotoBase64);
+byte[] imageBytes = Convert.FromBase64String(photoBase64);
 using var ms = new MemoryStream(imageBytes);
 using var image = Image.Load<Rgb24>(ms);
 
 // 2. Resize in-memory to the exact ArcFace resolution (112x112)
 image.Mutate(x => x.Resize(112, 112));
 
-// 3. Create the tensor in HWC format [1, 112, 112, 3]
+// 3. Create the input tensor in HWC format [1, 112, 112, 3]
 var tensor = new DenseTensor<float>(new[] { 1, 112, 112, 3 });
 
 // 4. Map pixels and apply mathematical normalization
@@ -186,7 +236,7 @@ Cosine Similarity(A, B) = (A . B) / (||A||_2 * ||B||_2)
 We implement this metric in C# as follows:
 
 ```csharp
-public double CalcularSimilitud(float[] vectorA, float[] vectorB)
+public double CalculateSimilarity(float[] vectorA, float[] vectorB)
 {
     if (vectorA == null || vectorB == null) return 0.0;
     if (vectorA.Length != vectorB.Length) return 0.0;
@@ -221,49 +271,58 @@ To optimize this, we implemented two key strategies:
 The [ReconocimientoFacialService](file:///home/jonas/Lab/RhSoft/RhSoft.API/RhSoftAPI/Services/Asistencia/ReconocimientoFacialService.cs) class maintains a static in-memory list:
 `private static List<(int IdEmpleado, string NombreCompleto, string ClaveEmpleado, float[] Vector)> _vectoresCache`
 
-At startup, we load the serialized vectors from the database into RAM. This cache automatically invalidates and reloads every **5 minutes** via timestamp checks, or immediately if a new employee photo is registered in the system.
+At startup, we load the serialized vectors from the database into RAM. This cache is protected with locks (`_cacheLock`) to prevent race conditions during updates.
 
-### B. Parallel Comparisons (1:N)
-When an employee does not enter their employee ID and the system must identify who they are by comparing their face against the entire organization (1-to-N search), we must utilize CPU threads efficiently. Instead of a standard sequential `foreach` loop, we leverage multi-core parallelism using .NET's `Parallel.ForEach`:
+### B. Computational Complexity: 1:1 Verification vs. 1:N Identification
+Depending on how the employee interacts with the terminal, the system uses one of two comparison models:
+* **1:1 Verification (With ID)**: The employee inputs their ID key. The API queries the SQL Server database for that specific employee, retrieves the pre-calculated embedding, and runs a single cosine similarity check. The computational complexity is `O(1)`. This scales infinitely, regardless of whether the company has 1,000 or 1,000,000 employees.
+* **1:N Identification (Without ID)**: The employee stands in front of the camera and checks in seamlessly without entering any key. The system must compare the captured face against the entire active database. This has a complexity of `O(N)`.
+
+For a database of nearly 1000 users, running `O(N)` comparisons sequentially on a CPU would take significant time. To keep this operation under 2ms, we leverage multi-core parallelism via `Parallel.ForEach`:
 
 ```csharp
-public (int? IdEmpleado, double Score) IdentificarEmpleado(
-    float[] vectorCamara, 
-    List<(int IdEmpleado, string NombreCompleto, string ClaveEmpleado, float[] Vector)> vectoresReferencia)
+public (int? EmployeeId, double Score) IdentifyEmployee(
+    float[] cameraVector, 
+    List<(int EmployeeId, string FullName, string EmployeeKey, float[] Vector)> referenceVectors)
 {
-    if (vectorCamara == null || vectoresReferencia == null || !vectoresReferencia.Any())
+    if (cameraVector == null || referenceVectors == null || !referenceVectors.Any())
     {
         return (null, 0.0);
     }
 
-    double mejorScore = 0.0;
-    int? mejorIdEmpleado = null;
+    double bestScore = 0.0;
+    int? bestEmployeeId = null;
     object lockObject = new object();
 
     // Parallel multi-core comparison
-    Parallel.ForEach(vectoresReferencia, (refVector) =>
+    Parallel.ForEach(referenceVectors, (refVector) =>
     {
-        double similitud = CalcularSimilitud(vectorCamara, refVector.Vector);
+        double similarity = CalculateSimilarity(cameraVector, refVector.Vector);
 
         lock (lockObject)
         {
-            if (similitud > mejorScore)
+            if (similarity > bestScore)
             {
-                mejorScore = similitud;
-                mejorIdEmpleado = refVector.IdEmpleado;
+                bestScore = similarity;
+                bestEmployeeId = refVector.EmployeeId;
             }
         }
     });
 
-    double umbralEstricto = 0.60;
-    if (mejorScore >= umbralEstricto)
+    double strictThreshold = 0.60;
+    if (bestScore >= strictThreshold)
     {
-        return (mejorIdEmpleado, mejorScore);
+        return (bestEmployeeId, bestScore);
     }
 
-    return (null, mejorScore);
+    return (null, bestScore);
 }
 ```
+
+### C. Event-Driven Cache Invalidation
+Storing embeddings in RAM means we must ensure that any changes in the database are reflected in memory. We implement a dual-invalidation strategy:
+1. **Time-Based Invalidation**: Every time a request comes in, the service checks if more than 5 minutes have elapsed since `_ultimaActualizacion`. If so, it triggers an asynchronous reload from the database.
+2. **Event-Driven Invalidation**: If an administrator uploads a new reference photo or updates an employee's profile in the HR portal, the database transaction automatically updates the database. The next API request detects the cache dirty state (or the admin request explicitly resets `_ultimaActualizacion = DateTime.MinValue`), forcing a cache reload. This ensures new employees can check in immediately without waiting.
 
 ---
 
