@@ -16,7 +16,7 @@ mermaid: true
 
 Employee attendance tracking through biometrics often relies on cloud services like Azure Cognitive Services or AWS Rekognition. While easy to use, they introduce significant recurring costs and raise privacy concerns by processing faces on third-party servers.
 
-To address this in **RhSoft's** **Asistencia** (Attendance) system, we implemented a **local, self-hosted, high-performance facial recognition engine** in C# and .NET. We combined the speed of **ONNX Runtime** with the accuracy of **ArcFace**, a state-of-the-art deep learning model.
+To address this in the attendance tracking module of **[RhSoft](https://www.rhsoft.mx/)** (our comprehensive payroll and HR management software), we implemented a **local, self-hosted, high-performance facial recognition engine** in C# and .NET. We combined the speed of **ONNX Runtime** with the accuracy of **ArcFace**, a state-of-the-art deep learning model.
 
 In this article, we explore the theory behind the model, image preprocessing, vector comparison math, and how we structured the service in C# to achieve parallel search times in sub-milliseconds.
 
@@ -74,7 +74,7 @@ sequenceDiagram
 
 A naive implementation of facial recognition would stream the webcam video feed directly to the backend, or have the server process every single frame to detect whether a face is in the image. On a CPU-only server serving nearly 1000 users, running a continuous face face detection model like RetinaFace or MTCNN for multiple active clients would instantly saturate the CPU.
 
-To solve this, **Asistencia** implements a hybrid architecture:
+To solve this, **RhSoft** implements a hybrid architecture:
 
 #### 1. Client-Side Detection (MediaPipe)
 The frontend browser loads Google's MediaPipe `FaceDetector` (using the lightweight `blaze_face_short_range.tflite` model delegating execution to the user's local GPU/CPU if available). The browser runs a fast, real-time loop checking the webcam feed locally:
@@ -342,6 +342,6 @@ Data persistence was designed to be independent of local file system directories
 
 ## Conclusion
 
-Migrating facial recognition from managed cloud services to a local engine based on **ONNX Runtime and ArcFace** in C# reduced system latency and eliminated AI infrastructure costs to $0. In **RhSoft's** real production environment, this system serves **nearly 1000 active users running on a standard CPU server with no dedicated GPU**, demonstrating exceptional efficiency with virtually imperceptible inference and matching times.
+Migrating facial recognition from managed cloud services to a local engine based on **ONNX Runtime and ArcFace** in C# reduced system latency and eliminated AI infrastructure costs to $0. In **[RhSoft](https://www.rhsoft.mx/)'s** real production environment, this system serves **nearly 1000 active users running on a standard CPU server with no dedicated GPU**, demonstrating exceptional efficiency with virtually imperceptible inference and matching times.
 
 By leveraging native .NET parallelism and RAM-based storage of normalized embeddings, the 1-to-N search process between the in-memory reference database and the captured face adds virtually zero overhead to the recognition flow. The entire validation completes in just a few milliseconds while keeping employee biometric data fully secure within the corporate network.
