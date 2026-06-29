@@ -7,7 +7,7 @@ categories: [Artificial Intelligence, C#]
 tags: [csharp, onnx, arcface, machine-learning, dotnet, computer-vision]
 image:
   path: /assets/img/post/facial-recognition-csharp-onnx-arcface/facial_recognition.jpg
-  lqip: /assets/img/post/facial-recognition-csharp-onnx-arcface/facial_recognition.jpg
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/refs/heads/main/assets/img/facial-recognition-csharp-onnx-arcface/facial_recognition.jpg
   alt: Facial recognition and embeddings with neural networks in C#
 mermaid: true
 ---
