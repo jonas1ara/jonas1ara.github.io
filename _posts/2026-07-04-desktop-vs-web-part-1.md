@@ -23,7 +23,7 @@ Writing a high-performance desktop application forces you to look under the hood
 
 This is Part 1 of a two-part series on what building **[Glance PDF](https://github.com/jonas1ara/Glance)**—a hybrid desktop PDF reader ([WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) + Rust)—teaches you about systems-level programming. Today, we're diving deep into the **.NET Memory Model: Stack, Heap, and the GC Dance**.
 
-> 🚀 **Want to see these concepts in action?** Download **[Glance PDF on the Microsoft Store](https://apps.microsoft.com/detail/9P387LMMCCTB)** to experience a modern, lightning-fast PDF reader designed natively for Windows 11 with smooth 60fps scrolling and instant loading times!
+> **Want to see these concepts in action?** Download **[Glance PDF on the Microsoft Store](https://apps.microsoft.com/detail/9P387LMMCCTB)** to experience a modern, lightning-fast PDF reader designed natively for Windows 11 with smooth 60fps scrolling and instant loading times!
 
 ---
 
