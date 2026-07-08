@@ -13,6 +13,8 @@ image:
 
 # Desktop Apps Teach You More About a Language Than Web Apps Can
 
+> **Disclaimer:** This implementation was developed as part of a side project to explore and showcase Rust and C# integration and memory management in both. I am not a memory expert, so please keep that in mind.
+
 In modern web development, memory is largely a request-scoped abstraction. A request comes in, a handful of short-lived objects are allocated, a database query is resolved, a JSON response is serialized, and the Garbage Collector (GC) silently sweeps away the debris. Since web servers are stateless and request loops are brief, you can get away with poor memory practices for a very long time before your server runs out of RAM.
 
 But on the desktop, **state lives forever**.
@@ -22,8 +24,6 @@ A desktop application (like a document viewer or editor) is a single, long-lived
 Writing a high-performance desktop application forces you to look under the hood of your language runtime. It turns abstract concepts into hard execution constraints.
 
 This is Part 1 of a two-part series on what building **[Glance PDF](https://github.com/jonas1ara/Glance)**—a hybrid desktop PDF reader ([WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) + Rust)—teaches you about systems-level programming. Today, we're diving deep into the **.NET Memory Model: Stack, Heap, and the GC Dance**.
-
-> **Want to see these concepts in action?** Download **[Glance PDF on the Microsoft Store](https://apps.microsoft.com/detail/9P387LMMCCTB)** to experience a modern, lightning-fast PDF reader designed natively for Windows 11 with smooth 60fps scrolling and instant loading times!
 
 ---
 
@@ -161,4 +161,3 @@ Stay tuned for [Part 2](/posts/desktop-vs-web-part-2)!
 ### Support the Project!
 * **Repository:** [github.com/jonas1ara/Glance](https://github.com/jonas1ara/Glance)
 * **Get the App on Windows:** [Glance PDF on Microsoft Store](https://apps.microsoft.com/detail/9P387LMMCCTB)
-* **Buy Me a Coffee:** [buymeacoffee.com/jonas1ara](https://buymeacoffee.com/jonas1ara)

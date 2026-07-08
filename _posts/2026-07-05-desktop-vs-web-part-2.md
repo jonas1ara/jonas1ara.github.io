@@ -13,6 +13,8 @@ image:
 
 # Desktop Apps Teach You More About a Language Than Web Apps Can
 
+> **Disclaimer:** This implementation was developed as part of a side project to explore and showcase Rust and C# integration and memory management in both. I am not a memory expert, so please keep that in mind.
+
 In [Part 1](/posts/desktop-vs-web-part-1), we looked at how long-lived desktop states force you to master .NET memory structures: the stack, the heap, GC generations, and pinning through the lens of **[Glance PDF](https://github.com/jonas1ara/Glance)**.
 
 But when your desktop application relies on a **hybrid architecture** (such as Glance's C#/.NET UI layer calling our high-performance native library written in Rust), you cross the border into the unmanaged world. 
@@ -20,10 +22,6 @@ But when your desktop application relies on a **hybrid architecture** (such as G
 Suddenly, your code has no safety net. A single mismatched pointer size, an unhandled thread race, or a wrong memory deallocation will crash the application instantly, leaving only a cryptic exit code in the OS logs.
 
 This is Part 2, where we cover **Rust Ownership, Unsafe FFI boundaries, and UI Thread Deadlocks** in Glance.
-
-<blockquote>
- <b>Try it:</b> <b><a href="https://apps.microsoft.com/detail/9P387LMMCCTB" target="_blank">Glance PDF on the Microsoft Store</a></b> — a Fluent C# UI over a raw Rust rendering engine.
-</blockquote>
 
 ---
 
@@ -275,4 +273,3 @@ If you want to read the real-world implementation of these memory management pat
 ### Support the Project!
 * **Repository:** [github.com/jonas1ara/Glance](https://github.com/jonas1ara/Glance)
 * **Get the App on Windows:** [Glance PDF on Microsoft Store](https://apps.microsoft.com/detail/9P387LMMCCTB)
-* **Buy Me a Coffee:** [buymeacoffee.com/jonas1ara](https://buymeacoffee.com/jonas1ara)
