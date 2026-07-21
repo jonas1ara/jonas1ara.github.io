@@ -61,7 +61,7 @@ public static extern Response pdf_render_page(
 );
 ```
 
-Because `RenderOptions` is a value type, `ref RenderOptions opts` passes a pointer to stack memory straight into the native call—no boxing, no heap object for the marshaller to allocate and the GC to later collect. The matching `Response` struct that comes back (`Success`, `ErrorMsg`, `DataPtr`, `DataLen`) follows the same rule: it's a `[StructLayout(LayoutKind.Sequential)]` struct that mirrors the Rust `#[repr(C)]` layout byte-for-byte, so the marshaller can copy it directly without reflection.
+Because `RenderOptions` is a value type, `ref RenderOptions opts` passes a pointer to stack memory straight into the native call—no boxing, no heap object for the marshaller to allocate and the GC to later collect. The matching `Response` struct that comes back (`Success`, `ErrorMsg`, `DataPtr`, `DataLen`) follows the same rule: it's a `[StructLayout(LayoutKind.Sequential)]` struct that mirrors the Rust `#[repr(C)]` layout field-for-field, so the marshaller can copy it directly without reflection. The two sides don't even agree on the width of `Success`—C#'s unmarshaled `bool` defaults to a 4-byte Win32 `BOOL`, while Rust's `#[repr(C)] bool` is a single byte—but it doesn't matter: the next field is an 8-byte pointer, so alignment padding pushes `ErrorMsg`/`error_msg` to offset 8 on both sides regardless. The offsets end up identical even though that one field's raw size doesn't.
 
 ```csharp
 // PdfRenderService.cs

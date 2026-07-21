@@ -76,7 +76,6 @@ To share this state across the application boundary, Rust requires us to be very
 // A wrapper representing the PDF engine state in Rust (glance-native)
 pub struct PdfEngine {
     document: PdfDocument,
-    // The engine holds a static or explicit lifetime reference
     current_page_index: usize,
 }
 
@@ -133,7 +132,7 @@ Suppose Glance's Rust backend renders a PDF page into a PNG byte buffer and pass
 
 ```rust
 // Rust: Allocates a PNG byte buffer on the native heap
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn render_page() -> Response {
     let png_bytes: Vec<u8> = render_pdf_to_png();
     let data_len = png_bytes.len() as u64;
@@ -160,7 +159,7 @@ We implement a dedicated `memory_free` FFI endpoint in Rust. When C# is done wit
 
 ```rust
 // Rust: Safely reconstructs the allocated type to release it
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn memory_free(ptr: *mut u8, len: u64) {
     if !ptr.is_null() {
         unsafe {
@@ -221,8 +220,8 @@ In Glance, a background task (`_backgroundRenderTask`) renders PDF pages sequent
 ### The Solution: Thread-Safe Disposal & Non-Blocking ThreadPool Offloading
 To break this circular dependency, we did two things in Glance:
 
-1. **Thread-Safe Engine Disposal:** 
-   We modified [PdfRenderService.cs](https://github.com/jonas1ara/Glance/blob/master/src/Services/PdfRenderService.cs#L233) to synchronize `Dispose()`. Before destroying the native Rust PDF engine handle, it calls `_ffiLock.Wait()`. This ensures that if the background thread is currently rendering, the UI thread waits safely until the page finishes, preventing access violations.
+1. **Thread-Safe, Non-Blocking Engine Disposal:** 
+   We modified [PdfRenderService.cs](https://github.com/jonas1ara/Glance/blob/master/src/Services/PdfRenderService.cs#L241) so `Dispose()` never blocks its caller. Instead of destroying the native Rust PDF engine handle synchronously, it wraps the teardown in `Task.Run(async () => { await _ffiLock.WaitAsync(); ... })`. If the background thread is mid-render, this fire-and-forget task waits on the ThreadPool—not the UI thread—until the page finishes, then calls `pdf_engine_destroy`, preventing access violations without ever risking a synchronous block on the caller.
 2. **Non-Blocking ThreadPool Offloading on Exit:**
    We modified [MainWindow.xaml.cs](https://github.com/jonas1ara/Glance/blob/master/src/MainWindow.xaml.cs) to offload the shutdown and auto-save sequence to the **ThreadPool** entirely, letting the UI thread process its message queue freely. The real handler also decides *whether* to save and *how* to ask the user (a `ContentDialog` path when auto-save is off), but the deadlock-critical core is this:
 
