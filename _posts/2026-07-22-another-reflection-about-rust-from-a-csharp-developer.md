@@ -1,5 +1,5 @@
 ---
-title: "Another Reflexion about Rust from a C# Developer"
+title: "Another Reflection about Rust from a C# Developer"
 description: "Closing the Glance Rust series with a look back: how learning Rust's ownership model, enums, and compiler discipline quietly made me a better C# developer — and why the industry stopped treating Rust as speculative."
 Author: Jonas Lara
 date: 2026-07-22 00:00:00 +0000
@@ -11,7 +11,7 @@ image:
   alt: Rust and C# side by side
 ---
 
-# Another Reflexion about Rust from a C# Developer
+# Another Reflection about Rust from a C# Developer
 
 ### Closing a loop
 
