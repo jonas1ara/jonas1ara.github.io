@@ -28,7 +28,6 @@ In C#, I used to treat the compiler as a gate: does it build, yes/no. Rust's com
 That shows up in small, concrete ways:
 
 - I reach for `readonly`, `record`, and `record struct` by default now, and only relax to a mutable class when I have a real reason — not the other way around.
-- I actually read the nullable reference type warnings instead of sprinkling `!` to make them go away.
 - When I return errors, I lean toward an explicit result type (a small `Result<T, TError>`-style struct) for expected failure paths, and reserve exceptions for things that are genuinely exceptional — a very Rust-shaped distinction that C#'s exception-happy culture doesn't encourage on its own.
 - I've started noticing allocations I would have ignored before — where a `Span<T>` or pooling an array actually matters, instead of trusting the GC to make it a non-problem.
 
@@ -80,9 +79,7 @@ For years, Rust hype had a specific shape: enthusiasm running well ahead of adop
 
 I used to treat "should I learn Rust" as a bet on a possible future. It isn't anymore. Two data points made that obvious to me.
 
-The first time Rust actually made noise across the industry was because of this.
-
-The first is Mark Russinovich, Azure's CTO, who has been saying for years — first in a 2019 BlueHat IL talk, then publicly and repeatedly since 2022 — that roughly **70% of the CVEs Microsoft has had to patch across its own software trace back to the same root cause: memory safety bugs in C and C++**. Not seventy different problems. One problem, wearing seventy different masks, for decades. His conclusion wasn't "be more careful." It was: stop starting new projects in languages where this class of bug is even possible, and use Rust instead.
+The first time Rust actually made noise across the industry was because of Mark Russinovich, Azure's CTO. He'd been saying for years — first in a 2019 BlueHat IL talk, then publicly and repeatedly since 2022 — that roughly **70% of the CVEs Microsoft has had to patch across its own software trace back to the same root cause: memory safety bugs in C and C++**. Not seventy different problems. One problem, wearing seventy different masks, for decades. His conclusion wasn't "be more careful." It was: stop starting new projects in languages where this class of bug is even possible, and use Rust instead.
 
 That wasn't just a keynote line Microsoft quietly forgot about. It turned into a training book and a pile of shipping software. Microsoft has published an entire [Rust-for-C#-developers training book](https://microsoft.github.io/RustTraining/csharp-book/ch00-introduction.html) that maps ownership vs. GC, traits vs. interfaces, `Result` vs. exceptions, Cargo vs. NuGet — concept by concept, in terms a C# developer already understands. And Windows itself is quietly being rebuilt around exactly what Russinovich said back then:
 
@@ -93,7 +90,7 @@ That wasn't just a keynote line Microsoft quietly forgot about. It turned into a
 - [**sudo for Windows**](https://github.com/microsoft/sudo) — yes, `sudo` on Windows now exists, and it's written in Rust.
 - [**Coreutils for Windows**](https://learn.microsoft.com/en-us/windows/core-utils/overview) — `ls`, `cp`, `grep`, `find`, and dozens more Unix staples, running natively on Windows, built on the Rust-based `uutils/coreutils` project.
 
-And it's not just the client side of Windows — Azure itself moved the same direction. [**Azure Boost**](https://learn.microsoft.com/en-us/azure/azure-boost/overview), the hardware-offload layer sitting under Azure's VMs, made Rust the primary language for all new code on the system. [**OpenVMM**](https://opensource.microsoft.com/blog/2024/11/07/introducing-hyperlight-virtual-machine-based-security-for-functions-at-scale/) and Hyperlight are Rust-based virtualization projects built to isolate workloads at the hypervisor level. And in May 2026, the [**Azure SDK for Rust**](https://devblogs.microsoft.com/azure-sdk/from-beta-to-stable-announcing-the-azure-sdk-for-rust-ga/) hit general availability — stable 1.0 crates for Identity, Key Vault, and Storage, meaning Rust is no longer just how Microsoft builds Azure, it's now a first-class, supported way to *call* Azure too.
+And it's not just the client side of Windows — [**Azure Boost**](https://learn.microsoft.com/en-us/azure/azure-boost/overview), the hardware-offload layer under Azure's VMs, made Rust the primary language for all new code on the system, and the [**Azure SDK for Rust**](https://devblogs.microsoft.com/azure-sdk/from-beta-to-stable-announcing-the-azure-sdk-for-rust-ga/) reached general availability in May 2026.
 
 That's not a research bet. That's kernel-adjacent, developer-facing, cloud-infrastructure-facing, ship-to-a-billion-machines commitment — the same CTO who pointed at the 70% number years ago, followed all the way through to drivers, hypervisors, and terminal tools shipping in Rust today.
 
@@ -110,5 +107,3 @@ I'm not going to stop writing C#. That was never the plan, and to be clear, I'm 
 What actually changes isn't any single feature — it's that Rust forces you to think through your logic carefully enough to satisfy a compiler that refuses to take your word for it, and that habit doesn't turn off when you close the editor. Immutability by default, nullable reference types treated as a real contract instead of a warning to silence, a `Result`-shaped return instead of an exception for anything expected — none of that was ever exclusive to Rust, all of it was sitting in C# the whole time, and none of it felt urgent until Rust made thoroughness the default instead of the exception. It shows up in duller ways too: I profile before I guess now, I think about algorithmic complexity before I write the loop, I think about memory layout before I pick the collection. Not because C# suddenly requires any of that — because I finally do.
 
 Miguel de Icaza — fellow Mexican, and someone who's been through more language migrations than most of us ever will — put it plainly back in 2019: *"All of us writing C and C++ are living on borrowed time. The only safe future is Rust. Prepare your code to go out of scope."*
-
-That's the cycle closed. Not "I learned Rust." Something closer to: *I learned Rust, and it changed how I write the language I'm not leaving.*
