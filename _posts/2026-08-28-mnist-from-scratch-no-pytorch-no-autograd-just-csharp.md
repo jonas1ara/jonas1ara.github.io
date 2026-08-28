@@ -13,7 +13,7 @@ mermaid: true
 math: true
 ---
 
-# MNIST from Scratch: No PyTorch, No Autograd, Just C#.
+# MNIST from Scratch: No PyTorch, No Autograd, Just C#
 
 In modern deep learning, training a neural network on the classic MNIST dataset usually takes fewer than ten lines of Python:
 
