@@ -28,7 +28,7 @@ Frameworks like PyTorch, TensorFlow, and TorchSharp are marvelous pieces of soft
 
 However, relying entirely on these black boxes can obscure what a neural network actually is: **a sequence of parameterized matrix transformations, non-linear activations, and exact multivariate calculus executed via the chain rule**.
 
-In this article, we build and train a multi-layer perceptron (MLP) on MNIST **without a machine learning framework (no PyTorch, TensorFlow, or TorchSharp) and without an automatic differentiation engine**. We implement the layer architecture, forward passes, analytical backpropagation, and data pipeline manually in modern **C# (.NET 9 / .NET 10 preview)**, using `System.Numerics.Tensors.TensorPrimitives` for the underlying SIMD-accelerated linear algebra operations:
+In this article, we build and train a multi-layer perceptron (MLP) on MNIST **without a machine learning framework (no PyTorch, TensorFlow, or TorchSharp) and without an automatic differentiation engine**. We implement the layer architecture, forward passes, analytical backpropagation, and data pipeline manually in modern **C# (.NET 10)**, using `System.Numerics.Tensors.TensorPrimitives` for the underlying SIMD-accelerated linear algebra operations:
 
 1. **No Autograd Engine**: No dynamic graph tapes or reverse-mode automatic differentiation trees. We derive and implement the exact **analytical partial derivatives** directly.
 2. **Accelerated by `TensorPrimitives`**: Rather than writing hand-rolled scalar loops or assembly-level intrinsics, we build our layers on top of `TensorPrimitives`, which provides vectorized implementations operating directly on `Span<float>` and `ReadOnlySpan<float>`.
@@ -43,7 +43,7 @@ In this article, we build and train a multi-layer perceptron (MLP) on MNIST **wi
 The MNIST benchmark (originally compiled by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges) consists of $28 \times 28$ grayscale images of handwritten digits classified into 10 categories (`0` through `9`).
 
 ```mermaid
-graph LR
+flowchart LR
     subgraph Input ["Input Layer"]
         X["Input x<br/>(784 pixels)"]
     end
@@ -67,14 +67,13 @@ graph LR
         L["Loss = -ln(p[y])<br/>(Cross-Entropy)"]
     end
 
-    X --> Z1 --> A1 --> Z2 --> A2 --> Z3 --> Prob --> L
-
-    classDef tensor fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
-    classDef act fill:#0f172a,stroke:#f59e0b,stroke-width:2px,color:#f8fafc;
-    classDef loss fill:#31102b,stroke:#ec4899,stroke-width:2px,color:#f8fafc;
-    class X,Z1,Z2,Z3,Prob tensor;
-    class A1,A2 act;
-    class L loss;
+    X --> Z1
+    Z1 --> A1
+    A1 --> Z2
+    Z2 --> A2
+    A2 --> Z3
+    Z3 --> Prob
+    Prob --> L
 ```
 
 ### Parameter Breakdown
@@ -119,8 +118,7 @@ Because $\mathbf{t}$ is a one-hot distribution, $\sum_{\text{all } k} t_k = 1$, 
 
 $$\mathbf{\delta}_3 = \frac{\partial L}{\partial \mathbf{z}_3} = \mathbf{p} - \mathbf{t}$$
 
-> [!NOTE]
-> The analytical derivative of the combined Softmax and Cross-Entropy loss is simply the **prediction error vector** $(\mathbf{p} - \mathbf{t})$. In C#, this is executed with zero memory allocations:
+> **Key Takeaway**: The analytical derivative of the combined Softmax and Cross-Entropy loss is simply the **prediction error vector** $(\mathbf{p} - \mathbf{t})$. In C#, this is executed with zero memory allocations:
 > ```csharp
 > _prob.AsSpan().CopyTo(_dz3);
 > _dz3[label] -= 1.0f;
@@ -287,8 +285,7 @@ class DenseLayer
 }
 ```
 
-> [!NOTE]
-> **Initialization Note**: He (Kaiming) initialization is derived specifically for layers followed by ReLU non-linearities ($Var(W) = \frac{2}{\text{fan\_in}}$). For simplicity in our code, the same initialization is used across all three dense layers. For the final linear layer preceding Softmax, Xavier/Glorot initialization ($Var(W) = \frac{2}{\text{fan\_in} + \text{fan\_out}}$) is also a classic conventional choice.
+> **Initialization Note**: He (Kaiming) initialization is derived specifically for layers followed by ReLU non-linearities ($\operatorname{Var}(W) = \frac{2}{\text{fan-in}}$). For simplicity in our code, the same initialization is used across all three dense layers. For the final linear layer preceding Softmax, Xavier/Glorot initialization ($\operatorname{Var}(W) = \frac{2}{\text{fan-in} + \text{fan-out}}$) is also a classic conventional choice.
 
 ---
 
@@ -301,7 +298,7 @@ We use **Numerical Gradient Checking** via two-sided symmetric finite difference
 $$\frac{\partial L}{\partial w_{ij}} \approx \frac{L(w_{ij} + \epsilon) - L(w_{ij} - \epsilon)}{2\epsilon}$$
 
 ```mermaid
-graph TD
+flowchart TD
     A["Compute Forward Pass & Analytical Loss L"] --> B["Compute Manual Backward Pass (∇W_analytical)"]
     B --> C["For selected weights w_ij:"]
     C --> D["w_ij = w_ij + ε → Compute L+"]
@@ -619,9 +616,9 @@ Test accuracy: 98.14% (9814/10000)
 Weights saved to weights.bin
 ```
 
-> **Benchmark Environment**: Tested on a modern desktop CPU (AMD Ryzen / Linux x64) running .NET 9 Release build. Wall-clock times will vary across different CPU architectures and core frequencies.
+> **Benchmark Environment**: Tested on Windows 11 x64 (AMD Ryzen 5 8645HS, 16 GB RAM) executed directly as a single-file C# script via .NET 10 (`dotnet run Mnist.cs`). Wall-clock times will vary across different CPU architectures and core frequencies.
 
-On a modern desktop CPU, the 5 training epochs complete in **~6.9 seconds total**, reaching **98.14% test accuracy** on the 10,000 unseen test samples.
+On an AMD Ryzen 5 8645HS CPU, the 5 training epochs complete in **~6.9 seconds total**, reaching **98.14% test accuracy** on the 10,000 unseen test samples.
 
 ---
 
