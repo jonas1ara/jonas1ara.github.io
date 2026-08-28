@@ -6,8 +6,8 @@ date: 2026-08-28 00:00:00 +0000
 categories: [Artificial Intelligence, C#]
 tags: [csharp, dotnet, machine-learning, neural-networks, linear-algebra, backpropagation, deep-learning, tensors]
 image:
-  path: /assets/img/post/mnist-from-scratch/mnist.jpg
-  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/main/assets/img/post/mnist-from-scratch/mnist.jpg
+  path: /assets/img/post/mnist-from-scratch-no-pytorch-no-autograd-just-csharp/Mnist.png
+  lqip: https://raw.githubusercontent.com/jonas1ara/jonas1ara.github.io/main/assets/img/post/mnist-from-scratch-no-pytorch-no-autograd-just-csharp/Mnist.png
   alt: Handwritten digit classification and neural network backpropagation from scratch in C# with System.Numerics.Tensors
 mermaid: true
 math: true
