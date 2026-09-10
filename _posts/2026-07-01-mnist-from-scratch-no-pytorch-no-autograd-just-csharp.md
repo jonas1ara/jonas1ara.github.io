@@ -2,7 +2,7 @@
 title: "MNIST from Scratch: No PyTorch, No Autograd, Just C#"
 description: "Building and training a 3-layer neural network from scratch in C# without ML frameworks or autograd. We derive the analytical backpropagation pass, utilize TensorPrimitives for SIMD-accelerated math, verify gradients numerically, and analyze MNIST performance with momentum SGD."
 Author: Jonas Lara
-date: 2026-08-28 00:00:00 +0000
+date: 2026-07-01 00:00:00 +0000
 categories: [Artificial Intelligence, C#]
 tags: [csharp, dotnet, machine-learning, neural-networks, linear-algebra, backpropagation, deep-learning, tensors]
 image:
