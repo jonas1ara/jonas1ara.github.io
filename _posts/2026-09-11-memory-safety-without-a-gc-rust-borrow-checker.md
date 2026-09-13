@@ -444,7 +444,7 @@ public readonly ref struct Span<T>
 }
 ```
 
-This represents .NET's realization of zero-cost abstractions: the RyuJIT compiler recognizes `Span<T>` as a first-class intrinsic, inlining `.Slice()` directly into raw pointer arithmetic and hoisting bounds checks out of tight loops. Furthermore, because `Span<T>` is strictly stack-bound, writes through it bypass the CLR's generational card-table write barriers (`CORINFO_HELP_ASSIGN_REF`) completely.
+This embodies .NET's approach to zero-cost abstractions: by unifying contiguous memory representations—whether pointing to a stack-allocated buffer, a native pointer, or an interior slice of a managed array—behind a lightweight `(ref, length)` pair, the runtime eliminates intermediary heap allocations. The JIT inlines `.Slice()` and indexers into direct pointer arithmetic, turning high-level buffer manipulation into raw memory operations without sacrificing bounds safety.
 
 ### 2. `ref struct`: Compiler-Enforced Stack Affine Types
 
