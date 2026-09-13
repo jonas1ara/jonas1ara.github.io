@@ -322,11 +322,11 @@ In reality, **lifetimes are entirely erased during compilation**:
 flowchart LR
     A["Rust Source Code<br/>(&'a T, &'b mut T)"] --> B["MIR Borrow Checker<br/>(Region Inference & Invariant Verification)"]
     B --> C["LLVM IR Generation<br/>(Lifetimes Erased → raw ptr + noalias)"]
-    C --> D["Machine Assembly<br/>(Hardware Registers / 64-bit Pointers)"]
+    C --> D["Machine Assembly<br/>(Raw Machine Pointers / Hardware Registers)"]
 ```
 
 Once the MIR borrow checker validates that all loan regions satisfy affine safety invariants, the compiler strips away every lifetime annotation:
-- In the generated machine code, `&T` and `&mut T` are identical to **raw 64-bit addresses** held in CPU registers (just like raw pointers in C).
+- In the generated machine code, `&T` and `&mut T` typically compile down to **raw machine pointers** (or two-word fat pointers containing an address and metadata for dynamically sized types like `&[T]`, `&str`, or `&dyn Trait`)—with zero hidden lifetime wrappers or runtime tracking overhead.
 - There are no runtime locks, no reference metadata, and zero branching penalty during pointer dereferencing.
 
 ### 2. The Aliasing Advantage: Unlocking LLVM `noalias`
@@ -493,4 +493,9 @@ Rust demonstrated that systems software does not require a garbage collector to 
 
 Equally important, the industry-wide push for zero-overhead safety influenced how managed runtimes approach high-throughput design. Modern C# did not abandon its garbage collector; instead, it synthesized both paradigms. By introducing `Span<T>`, `ReadOnlySpan<T>`, and compiler-enforced `ref struct` escape rules, .NET adopted stack-bound affine guarantees for performance-critical computing, while preserving the velocity and convenience of a tracing GC for broader application domains.
 
-In the upcoming articles of this series, we will build directly upon these theoretical pillars—exploring how the modern .NET runtime implements zero-copy network pipelines, analyzes SIMD vectorization via `TensorPrimitives`, and leverages hardware intrinsics without sacrificing memory safety.
+In the upcoming articles of this series, we will build directly upon these theoretical pillars—dissecting the CLR's stack, heap, and generational GC dynamics, implementing deterministic reference counting by hand, constructing a functional mark-and-sweep collector from scratch, and engineering custom low-level allocators using `Span<T>` and `NativeMemory`:
+
+- **Understanding .NET Memory, Part 1**: Stack, Heap, and the GC Dance
+- **Understanding .NET Memory, Part 2**: Reference Counting by Hand
+- **Understanding .NET Memory, Part 3**: Building a Mark-and-Sweep GC from Scratch
+- **Understanding .NET Memory, Part 4**: Writing Your Own Allocator with `Span<T>` and `NativeMemory`
