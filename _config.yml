@@ -16,10 +16,10 @@ timezone: America/Mexico_City
 
 title: Jonas Lara # the main title
 
-tagline: "Algorithms"
+tagline: "Think whatever you want, I don't care"
 
 description: >- # used by seo meta and the atom feed
-  "Algorithms"
+  "Think whatever you want, I don't care"
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
